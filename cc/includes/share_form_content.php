@@ -46,6 +46,7 @@ while ($row=mysqli_fetch_array($query))
         $run=mysqli_query($connection,$select_query);
             $row=mysqli_fetch_array($run);
             $username = $row['username'];
+            $username=strtolower($username);
             $file_name = $row['file_name'];
             $file_type = $row['file_type'];
             $file_size = $row['file_size'];
@@ -53,7 +54,8 @@ while ($row=mysqli_fetch_array($query))
         if (isset($_POST['submit']))
         {
             $name=$_POST['name'];
-            $sql="SELECT username from user_details WHERE username='$name'";
+            $name=strtolower($name);
+            $sql="SELECT username from user_details WHERE username='$name'or email='$name'";
             $run_query=mysqli_query($connection,$sql);
             $ucheck=mysqli_num_rows($run_query);
             if ($ucheck==0)
@@ -67,6 +69,9 @@ while ($row=mysqli_fetch_array($query))
                 {
                     echo "<script>alert('File cannot be shared to your own.');
 			</script>";
+                }
+                elseif ($email==$name) {
+                     echo "<script>alert('File cannot be shared to your own.');</script>";
                 }
                 else
                 {
