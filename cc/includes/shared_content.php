@@ -5,13 +5,14 @@ if (!isset($_SESSION))
     session_start();
 }
 $username=$_SESSION['username'];
-$query= mysqli_query($connection, "select id,username from
+$query= mysqli_query($connection, "select id,username,email from
                     user_details WHERE username='$username' 
                     OR email='$username'");
 while ($row=mysqli_fetch_array($query))
 {
     $username=$row['username'];
     $id=$row['id'];
+    $email=$row['email'];
 }
 ?>
 
@@ -19,7 +20,7 @@ while ($row=mysqli_fetch_array($query))
 <div class="col-md-7 ">
 
     <?php
-    $select_posts="SELECT DISTINCT * FROM shared where shared_to='$username' order by date DESC";
+    $select_posts="SELECT DISTINCT * FROM shared where shared_to='$username' or shared_to='$email' order by date DESC";
     $run_posts=mysqli_query($connection,$select_posts);
     while($row=mysqli_fetch_array($run_posts)){
         $post_image=$row['file_name'];
