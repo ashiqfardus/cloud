@@ -32,7 +32,14 @@ while ($row=mysqli_fetch_array($query))
 	                    <hr>
 	                    <li><a href="trash.php?id=<?php echo md5($id); ?>"><i class="fa fa-trash fa-lg" aria-hidden="true"></i> Trash</a></li>
 	                    <hr>
-	                    <p class="size_text"><li>15MB Free of 200MB</li></p>
+	                    <?php
+	                    	$sql="SELECT SUM(file_size) AS value_sum FROM data WHERE username='$username'";
+	                    	$run=mysqli_query($connection, $sql);
+	                    	$row = mysqli_fetch_assoc($run);
+							$sum = $row['value_sum'];
+							$new_size=200-$sum;
+	                    ?>
+	                    <p class="size_text"><li><?php echo $new_size; ?> MB Free of 200MB</li></p>
 	                </ul>
         		</nav>
 			</div>
