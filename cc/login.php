@@ -31,19 +31,19 @@
 			  <div class="form-group">
 			    <label class="control-label col-sm-4 col-md-4" for="email">Username or Email:</label>
 			    <div class="col-sm-4 col-md-4">
-			      <input type="text" class="form-control" id="email" placeholder="Enter Username Or Email" name="username" >
+			      <input type="text" class="form-control" id="email" value="<?php if(isset($_COOKIE["username"])) { echo $_COOKIE["username"]; } ?>" name="username" >
 			    </div>
 			  </div>
 			  <div class="form-group">
 			    <label class="control-label col-sm-4 col-md-4" for="pwd">Password:</label>
 			    <div class="col-sm-4 col-md-4"> 
-			      <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password">
+			      <input type="password" class="form-control" id="pwd" value="<?php if(isset($_COOKIE["password"])) { echo $_COOKIE["password"]; } ?>" name="password">
 			    </div>
 			  </div>
 			  <div class="form-group"> 
 			    <div class="col-sm-offset-4 col-sm-5">
 			      <div class="checkbox">
-			        <label><input type="checkbox"> Remember me</label>
+			        <label><input type="checkbox" name="remember"> Remember me</label>
 			      </div>
 			    </div>
 			  </div>
@@ -82,6 +82,7 @@ include ('includes/connect.php');
 if (isset($_POST['submit']))
 {
     $username = $_POST['username'];
+    $username=strtolower($username);
     $password= $_POST['password'];
     $password=md5($password);
 
@@ -96,9 +97,18 @@ if (isset($_POST['submit']))
 
             $_SESSION['username']= $username;
             header("location: index.php");
-
-
-        }
+            if(!empty($_POST["remember"])) {
+				setcookie ("username",$_POST["username"],time()+ (10 * 365 * 24 * 60 * 60));
+				setcookie ("password",$_POST["password"],time()+ (10 * 365 * 24 * 60 * 60));
+			} else {
+				if(isset($_COOKIE["username"])) {
+					setcookie ("username","");
+				}
+				if(isset($_COOKIE["password"])) {
+					setcookie ("password","");
+				}
+			 }
+			}
         else
         {
             ?>
